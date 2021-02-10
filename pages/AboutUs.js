@@ -6,11 +6,11 @@ const Heading = styled.h1`
   color: red;
 `;
 
-export default function Home() {
+export default function AboutUs() {
   return (
     <div className={styles.container}>
       <Layout>
-        <Heading>Inicio</Heading>
+        <Heading>Nosotros</Heading>
       </Layout>
     </div>
   );
