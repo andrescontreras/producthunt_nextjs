@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import styles from '../styles/Home.module.css';
 import styled from '@emotion/styled';
 import Layout from '../components/layouts/Layout';
-import { Form, Field, InputSubmit } from '../components/ui/Form';
+import { Form, Field, InputSubmit, Error } from '../components/ui/Form';
+import Router from 'next/router';
 
 import useValidation from '../hooks/useValidation';
 import validateCreateAccount from '../validation/validateCreateAccount';
+
+import firebase from '../firebase';
 
 const Heading = styled.h1`
   color: red;
@@ -19,8 +22,17 @@ export default function CreateAccount() {
     password: '',
   };
 
-  const createAccount = () => {
-    console.log('Creando cuenta');
+  const [error, saveError] = useState(false);
+
+  const createAccount = async () => {
+    try {
+      console.log('Creando cuenta');
+      await firebase.register(name, email, password);
+      Router.push('/');
+    } catch (error) {
+      console.log(Error);
+      saveError(error.message);
+    }
   };
 
   const {
@@ -29,6 +41,7 @@ export default function CreateAccount() {
     submitForm,
     handleSubmit,
     handleChange,
+    handleBlur,
   } = useValidation(initialState, validateCreateAccount, createAccount);
 
   const { name, email, password } = values;
@@ -55,8 +68,10 @@ export default function CreateAccount() {
                 name="name"
                 value={name}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
             </Field>
+            {errors.name && <Error>{errors.name}</Error>}
             <Field>
               <label htmlFor="email">Correo</label>
               <input
@@ -66,9 +81,10 @@ export default function CreateAccount() {
                 name="email"
                 value={email}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
             </Field>
-
+            {errors.email && <Error>{errors.email}</Error>}
             <Field>
               <label htmlFor="password">Contraseña</label>
               <input
@@ -78,9 +94,11 @@ export default function CreateAccount() {
                 name="password"
                 value={password}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
             </Field>
-
+            {errors.password && <Error>{errors.password}</Error>}
+            {error && <Error>{error}</Error>}
             <InputSubmit type="submit" value="Crear cuenta" />
           </Form>
         </>

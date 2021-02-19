@@ -6,7 +6,7 @@ const useValidation = (initialState, validate, fn) => {
 
   useEffect(() => {
     if (submitForm) {
-      const hasError = Object.keys(errors).length === 0;
+      const hasError = Object.keys(errors).length !== 0;
       if (!hasError) {
         fn();
       }
@@ -29,12 +29,18 @@ const useValidation = (initialState, validate, fn) => {
     setSubmitForm(true);
   };
 
+  const handleBlur = () => {
+    const validationErrors = validate(values);
+    setErrors(validationErrors);
+  };
+
   return {
     values,
     errors,
     submitForm,
     handleSubmit,
     handleChange,
+    handleBlur,
   };
 };
 
