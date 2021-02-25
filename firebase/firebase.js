@@ -2,6 +2,8 @@ import app from 'firebase/app';
 import { defaultHead } from 'next/head';
 import firebaseConfig from './config';
 import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/storage';
 
 class Firebase {
   constructor() {
@@ -9,6 +11,8 @@ class Firebase {
       app.initializeApp(firebaseConfig);
     }
     this.auth = app.auth();
+    this.db = app.firestore();
+    this.storage = app.storage();
   }
 
   async register(name, email, password) {
