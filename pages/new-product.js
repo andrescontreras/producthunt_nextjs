@@ -10,7 +10,7 @@ import useValidation from '../hooks/useValidation';
 import validateCreateAccount from '../validation/validateCreateProduct';
 import FileUploader from 'react-firebase-file-uploader';
 
-import firebase from '../firebase';
+import firebase from 'firebase';
 import { FirebaseContext } from '../firebase';
 
 export default function NewProduct() {
@@ -73,12 +73,13 @@ export default function NewProduct() {
         imageUrl,
         url,
         description,
-        votos: 0,
+        votes: 0,
         comments: [],
         created: Date.now(),
       };
 
       firebase.db.collection('Products').add(product);
+      return router.push('/');
     };
 
     const {
